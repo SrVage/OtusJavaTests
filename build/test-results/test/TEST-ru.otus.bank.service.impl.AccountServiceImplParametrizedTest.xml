@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ru.otus.bank.service.impl.AccountServiceImplParametrizedTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2024-03-16T12:21:01" hostname="MacBook-Air.local" time="0.793">
+  <properties/>
+  <testcase name="[1] 100, 10, true" classname="ru.otus.bank.service.impl.AccountServiceImplParametrizedTest" time="0.732"/>
+  <testcase name="[2] 10, 100, false" classname="ru.otus.bank.service.impl.AccountServiceImplParametrizedTest" time="0.003"/>
+  <testcase name="[3] 100, 0, false" classname="ru.otus.bank.service.impl.AccountServiceImplParametrizedTest" time="0.002"/>
+  <testcase name="[4] 100, -1, false" classname="ru.otus.bank.service.impl.AccountServiceImplParametrizedTest" time="0.003"/>
+  <testcase name="[1] 100, 10, true" classname="ru.otus.bank.service.impl.AccountServiceImplParametrizedTest" time="0.004"/>
+  <testcase name="[2] 10, 100, false" classname="ru.otus.bank.service.impl.AccountServiceImplParametrizedTest" time="0.002"/>
+  <testcase name="[3] 10, 0, false" classname="ru.otus.bank.service.impl.AccountServiceImplParametrizedTest" time="0.003"/>
+  <testcase name="[4] 10, -1, false" classname="ru.otus.bank.service.impl.AccountServiceImplParametrizedTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
