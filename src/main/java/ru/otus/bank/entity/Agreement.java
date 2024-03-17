@@ -1,5 +1,7 @@
 package ru.otus.bank.entity;
 
+import java.util.Objects;
+
 public class Agreement {
 
     private Long id;

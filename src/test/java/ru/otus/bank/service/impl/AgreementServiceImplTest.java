@@ -4,21 +4,25 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatcher;
 import org.mockito.Mockito;
 import ru.otus.bank.dao.AgreementDao;
 import ru.otus.bank.entity.Agreement;
 
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 public class AgreementServiceImplTest {
 
-    private AgreementDao dao = Mockito.mock(AgreementDao.class);
+    private AgreementDao agreementDao = mock(AgreementDao.class);
 
     AgreementServiceImpl agreementServiceImpl;
 
     @BeforeEach
     public void init() {
-        agreementServiceImpl = new AgreementServiceImpl(dao);
+        agreementServiceImpl = new AgreementServiceImpl(agreementDao);
     }
 
     @Test
@@ -28,13 +32,13 @@ public class AgreementServiceImplTest {
         agreement.setId(10L);
         agreement.setName(name);
 
-        Mockito.when(dao.findByName(name)).thenReturn(
+        when(agreementDao.findByName(name)).thenReturn(
                 Optional.of(agreement));
 
         Optional<Agreement> result = agreementServiceImpl.findByName(name);
 
-        Assertions.assertTrue(result.isPresent());
-        Assertions.assertEquals(10, agreement.getId());
+        assertTrue(result.isPresent());
+        assertEquals(10, agreement.getId());
     }
 
     @Test
@@ -46,14 +50,32 @@ public class AgreementServiceImplTest {
 
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
 
-        Mockito.when(dao.findByName(captor.capture())).thenReturn(
+        when(agreementDao.findByName(captor.capture())).thenReturn(
                 Optional.of(agreement));
 
         Optional<Agreement> result = agreementServiceImpl.findByName(name);
 
-        Assertions.assertEquals("test", captor.getValue());
-        Assertions.assertTrue(result.isPresent());
-        Assertions.assertEquals(10, agreement.getId());
+        assertEquals("test", captor.getValue());
+        assertTrue(result.isPresent());
+        assertEquals(10, agreement.getId());
     }
+    @Test
+    public void addAgreementTest(){
+        String agreementName = "name";
+        Agreement agreement = new Agreement();
+        agreement.setName(agreementName);
+
+        ArgumentMatcher<Agreement> matcher =
+                argument->
+                        argument != null
+                        && argument.getName().equals(agreementName);
+
+        when(agreementDao.save(argThat(matcher))).thenReturn(agreement);
+
+        assertEquals(agreement, agreementServiceImpl.addAgreement(agreementName));
+
+        verify(agreementDao, times(1)).save(argThat(matcher));
+    }
+
 
 }

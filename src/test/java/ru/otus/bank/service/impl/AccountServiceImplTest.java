@@ -3,10 +3,13 @@ package ru.otus.bank.service.impl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
+import org.junit.jupiter.params.provider.Arguments;
 import org.mockito.ArgumentMatcher;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import ru.otus.bank.dao.AccountDao;
 import ru.otus.bank.entity.Account;
 import ru.otus.bank.entity.Agreement;
@@ -16,6 +19,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -92,15 +96,33 @@ public class AccountServiceImplTest {
         firstAccount.setAmount(new BigDecimal(100));
         Account secondAccount = new Account();
         secondAccount.setId(1L);
+        secondAccount.setAmount(new BigDecimal(200));
         List<Account> testAccounts = new ArrayList<>();
         testAccounts.add(firstAccount);
         testAccounts.add(secondAccount);
-        firstAccount.setAmount(new BigDecimal(200));
         Agreement agreement = new Agreement();
         agreement.setId(1L);
         when(accountDao.findByAgreementId(eq(1L))).thenReturn(testAccounts);
         List<Account> accounts = accountServiceImpl.getAccounts(agreement);
         assertArrayEquals(testAccounts.toArray(), accounts.toArray());
+        verify(accountDao, times(1)).findByAgreementId(eq(1L));
+    }
+
+    @Test
+    public void getAllAccountsTest() {
+        Account firstAccount = new Account();
+        firstAccount.setId(1L);
+        firstAccount.setAmount(new BigDecimal(100));
+        Account secondAccount = new Account();
+        secondAccount.setId(2L);
+        firstAccount.setAmount(new BigDecimal(200));
+        List<Account> testAccounts = new ArrayList<>();
+        testAccounts.add(firstAccount);
+        testAccounts.add(secondAccount);
+        when(accountDao.findAll()).thenReturn(testAccounts);
+        List<Account> accounts = accountServiceImpl.getAccounts();
+        assertArrayEquals(testAccounts.toArray(), accounts.toArray());
+        verify(accountDao, times(1)).findAll();
     }
 
     @Test
@@ -122,7 +144,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    public void chargeExceptionTest(){
+    public void chargedExceptionTest(){
         BigDecimal chargeAmount = new BigDecimal(50);
 
         when(accountDao.findById(anyLong())).thenReturn(Optional.empty());
@@ -148,11 +170,18 @@ public class AccountServiceImplTest {
         account.setType(type);
         account.setAmount(amount);
 
-        when(accountDao.save(account)).thenReturn(account);
+        ArgumentMatcher<Account> matcher =
+                argument ->
+                        argument != null
+                        && argument.getNumber().equals(accountNumber)
+                        && argument.getType().equals(type)
+                        && argument.getAmount().equals(amount);
+
+        when(accountDao.save(argThat(matcher))).thenReturn(account);
 
         assertEquals(account, accountServiceImpl.addAccount(agreement, accountNumber, type, amount));
 
-        verify(accountDao, times(1)).save(account);
+        verify(accountDao, times(1)).save(argThat(matcher));
     }
 
 }
