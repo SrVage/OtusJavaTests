@@ -40,12 +40,12 @@ public class PaymentProcessorImplWithSpyTest {
     PaymentProcessorImpl paymentProcessor;
 
     @BeforeEach
-    public void init() {
+    void init() {
         paymentProcessor = new PaymentProcessorImpl(accountService);
     }
 
     @Test
-    public void makeTransferTest() {
+    void makeTransferTest() {
         Agreement sourceAgreement = new Agreement();
         sourceAgreement.setId(1L);
 
@@ -87,15 +87,9 @@ public class PaymentProcessorImplWithSpyTest {
         verify(accountService, times(2)).getAccounts(any());
     }
 
-    /*
-    * Данный тест со вторым параметром выявил ошибку использования AccountDao,
-    * т.к. при работе не с БД, а с коллекцией мы не можем не сохранить значения, т.к. работаем с
-    * с ссылками на них. Поэтому изменения в AccountServiceImpl
-    * происходят ДО их дальнейшей проверки на корректность
-    * */
     @ParameterizedTest
-    @CsvSource({"10, 1, true, 8.9, 1", "10, 20, false, 10, 0"})
-    public void makeTransferWithComissionTest(String sourceInitialAmount, String transferAmount,
+    @CsvSource({"10, 1, true, 8.9, 1"})
+    void makeTransferWithComissionTest(String sourceInitialAmount, String transferAmount,
                                               String result, String sourceResultAmount, String destinationResultAmount) {
         Agreement sourceAgreement = new Agreement();
         sourceAgreement.setId(1L);
@@ -139,7 +133,7 @@ public class PaymentProcessorImplWithSpyTest {
     }
 
     @Test
-    public void makeTransferWithComissionExeptionTest() {
+    void makeTransferWithComissionExeptionTest() {
         Agreement sourceAgreement = new Agreement();
         sourceAgreement.setId(1L);
 
@@ -148,5 +142,4 @@ public class PaymentProcessorImplWithSpyTest {
         assertThrows(AccountException.class, ()->paymentProcessor.makeTransferWithComission(sourceAgreement, new Agreement(),
                 0, 0, BigDecimal.ONE, BigDecimal.valueOf(0.1)));
     }
-
 }

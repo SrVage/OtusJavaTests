@@ -3,13 +3,10 @@ package ru.otus.bank.service.impl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
-import org.junit.jupiter.params.provider.Arguments;
 import org.mockito.ArgumentMatcher;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 import ru.otus.bank.dao.AccountDao;
 import ru.otus.bank.entity.Account;
 import ru.otus.bank.entity.Agreement;
@@ -19,7 +16,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -34,7 +30,7 @@ public class AccountServiceImplTest {
     AccountServiceImpl accountServiceImpl;
 
     @Test
-    public void testTransfer() {
+    void testTransfer() {
         Account sourceAccount = new Account();
         sourceAccount.setAmount(new BigDecimal(100));
 
@@ -51,7 +47,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    public void testSourceNotFound() {
+    void testSourceNotFound() {
         when(accountDao.findById(any())).thenReturn(Optional.empty());
 
         AccountException result = assertThrows(AccountException.class, new Executable() {
@@ -65,7 +61,7 @@ public class AccountServiceImplTest {
 
 
     @Test
-    public void testTransferWithVerify() {
+    void testTransferWithVerify() {
         Account sourceAccount = new Account();
         sourceAccount.setAmount(new BigDecimal(100));
         sourceAccount.setId(1L);
@@ -90,7 +86,7 @@ public class AccountServiceImplTest {
         }
 
     @Test
-    public void getAccountsTest() {
+    void getAccountsTest() {
         Account firstAccount = new Account();
         firstAccount.setId(1L);
         firstAccount.setAmount(new BigDecimal(100));
@@ -109,7 +105,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    public void getAllAccountsTest() {
+    void getAllAccountsTest() {
         Account firstAccount = new Account();
         firstAccount.setId(1L);
         firstAccount.setAmount(new BigDecimal(100));
@@ -126,7 +122,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    public void chargedTest(){
+    void chargedTest(){
         BigDecimal initialAmount = new BigDecimal(100);
         BigDecimal chargeAmount = new BigDecimal(50);
 
@@ -144,7 +140,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    public void chargedExceptionTest(){
+    void chargedExceptionTest(){
         BigDecimal chargeAmount = new BigDecimal(50);
 
         when(accountDao.findById(anyLong())).thenReturn(Optional.empty());
@@ -156,7 +152,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    public void addAccountTest(){
+    void addAccountTest(){
         Long agreementId = 5L;
         Agreement agreement = new Agreement();
         agreement.setId(agreementId);
@@ -183,5 +179,4 @@ public class AccountServiceImplTest {
 
         verify(accountDao, times(1)).save(argThat(matcher));
     }
-
 }

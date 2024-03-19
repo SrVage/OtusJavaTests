@@ -2,8 +2,6 @@ package ru.otus.bank.service.impl;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.ArgumentMatcher;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -28,7 +26,7 @@ public class PaymentProcessorImplTest {
     PaymentProcessorImpl paymentProcessor;
 
     @Test
-    public void makeTransferTest() {
+    void makeTransferTest() {
         Agreement sourceAgreement = new Agreement();
         sourceAgreement.setId(1L);
 
@@ -59,27 +57,5 @@ public class PaymentProcessorImplTest {
 
          paymentProcessor.makeTransfer(sourceAgreement, destinationAgreement,
                 0, 0, BigDecimal.ONE);
-
     }
-
-    @ParameterizedTest
-    @CsvSource({"100, 10, true", "10, 100, false", "10, 0, false", "10, -1, false"})
-    public void makeTransferWithComissionTest(String sourceAmount, String transfer, boolean result){
-        Agreement sourceAgreement = new Agreement();
-        sourceAgreement.setId(1L);
-
-        Agreement destinationAgreement = new Agreement();
-        destinationAgreement.setId(2L);
-
-        Account sourceAccount = new Account();
-        sourceAccount.setAmount(new BigDecimal(sourceAmount));
-        sourceAccount.setType(0);
-
-        Account destinationAccount = new Account();
-        destinationAccount.setAmount(BigDecimal.ZERO);
-        destinationAccount.setType(0);
-
-
-    }
-
 }
