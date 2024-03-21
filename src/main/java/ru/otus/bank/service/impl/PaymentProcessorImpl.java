@@ -47,7 +47,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                 .findAny()
                 .orElseThrow(() -> new AccountException("Account not found"));
 
-        accountService.charge(sourceAccount.getId(), amount.negate().multiply(comissionPercent));
+        accountService.charge(sourceAccount.getId(), amount.multiply(comissionPercent));
 
         return accountService.makeTransfer(sourceAccount.getId(), destinationAccount.getId(), amount);
     }

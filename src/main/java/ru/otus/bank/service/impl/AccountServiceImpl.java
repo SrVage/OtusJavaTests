@@ -44,6 +44,9 @@ public class AccountServiceImpl implements AccountService {
     public boolean charge(Long accountId, BigDecimal chargeAmount) {
         Account account= accountDao.findById(accountId)
                 .orElseThrow(() -> new AccountException("No source account"));
+        if (account.getAmount().compareTo(chargeAmount)<0){
+            return false;
+        }
         account.setAmount(account.getAmount().subtract(chargeAmount));
         accountDao.save(account);
         return true;
