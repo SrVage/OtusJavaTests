@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
-public class AgreementServiceImplTest {
+class AgreementServiceImplTest {
 
     private AgreementDao agreementDao = mock(AgreementDao.class);
 
@@ -58,16 +58,17 @@ public class AgreementServiceImplTest {
         assertTrue(result.isPresent());
         assertEquals(10, agreement.getId());
     }
+
     @Test
-    void addAgreementTest(){
+    void addAgreementTest() {
         String agreementName = "name";
         Agreement agreement = new Agreement();
         agreement.setName(agreementName);
 
         ArgumentMatcher<Agreement> matcher =
-                argument->
+                argument ->
                         argument != null
-                        && argument.getName().equals(agreementName);
+                                && argument.getName().equals(agreementName);
 
         when(agreementDao.save(argThat(matcher))).thenReturn(agreement);
 

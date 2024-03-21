@@ -27,7 +27,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
-public class PaymentProcessorImplWithSpyTest {
+class PaymentProcessorImplWithSpyTest {
 
     @Mock
     AccountDao accountDao;
@@ -78,7 +78,6 @@ public class PaymentProcessorImplWithSpyTest {
 
         when(accountDao.findById(10L)).thenReturn(Optional.of(sourceAccount));
         when(accountDao.findById(20L)).thenReturn(Optional.of(destinationAccount));
-//        when(accountDao.findById(30L)).thenReturn(Optional.of(destinationAccount));
 
         assertTrue(paymentProcessor.makeTransfer(sourceAgreement, destinationAgreement,
                 0, 0, BigDecimal.ONE));
@@ -90,7 +89,7 @@ public class PaymentProcessorImplWithSpyTest {
     @ParameterizedTest
     @CsvSource({"10, 1, true, 8.9, 1"})
     void makeTransferWithComissionTest(String sourceInitialAmount, String transferAmount,
-                                              String result, String sourceResultAmount, String destinationResultAmount) {
+                                       String result, String sourceResultAmount, String destinationResultAmount) {
         Agreement sourceAgreement = new Agreement();
         sourceAgreement.setId(1L);
 
@@ -136,10 +135,11 @@ public class PaymentProcessorImplWithSpyTest {
     void makeTransferWithComissionExeptionTest() {
         Agreement sourceAgreement = new Agreement();
         sourceAgreement.setId(1L);
+        BigDecimal commission = BigDecimal.valueOf(0.1);
 
         when(accountService.getAccounts(sourceAgreement)).thenReturn(Collections.emptyList());
 
-        assertThrows(AccountException.class, ()->paymentProcessor.makeTransferWithComission(sourceAgreement, new Agreement(),
-                0, 0, BigDecimal.ONE, BigDecimal.valueOf(0.1)));
+        assertThrows(AccountException.class, () -> paymentProcessor.makeTransferWithComission(sourceAgreement, new Agreement(),
+                0, 0, BigDecimal.ONE, commission));
     }
 }

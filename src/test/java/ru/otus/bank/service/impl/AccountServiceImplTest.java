@@ -22,7 +22,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class AccountServiceImplTest {
+class AccountServiceImplTest {
     @Mock
     AccountDao accountDao;
 
@@ -83,7 +83,7 @@ public class AccountServiceImplTest {
 
         verify(accountDao).save(argThat(sourceMatcher));
         verify(accountDao).save(argThat(destinationMatcher));
-        }
+    }
 
     @Test
     void getAccountsTest() {
@@ -122,7 +122,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    void chargedTest(){
+    void chargedTest() {
         BigDecimal initialAmount = new BigDecimal(100);
         BigDecimal chargeAmount = new BigDecimal(50);
 
@@ -140,7 +140,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    void chargedExceptionTest(){
+    void chargedExceptionTest() {
         BigDecimal chargeAmount = new BigDecimal(50);
 
         when(accountDao.findById(anyLong())).thenReturn(Optional.empty());
@@ -152,7 +152,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    void addAccountTest(){
+    void addAccountTest() {
         Long agreementId = 5L;
         Agreement agreement = new Agreement();
         agreement.setId(agreementId);
@@ -169,9 +169,9 @@ public class AccountServiceImplTest {
         ArgumentMatcher<Account> matcher =
                 argument ->
                         argument != null
-                        && argument.getNumber().equals(accountNumber)
-                        && argument.getType().equals(type)
-                        && argument.getAmount().equals(amount);
+                                && argument.getNumber().equals(accountNumber)
+                                && argument.getType().equals(type)
+                                && argument.getAmount().equals(amount);
 
         when(accountDao.save(argThat(matcher))).thenReturn(account);
 
