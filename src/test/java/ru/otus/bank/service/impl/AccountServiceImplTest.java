@@ -2,7 +2,6 @@ package ru.otus.bank.service.impl;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.function.Executable;
 import org.mockito.ArgumentMatcher;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -50,12 +49,8 @@ class AccountServiceImplTest {
     void testSourceNotFound() {
         when(accountDao.findById(any())).thenReturn(Optional.empty());
 
-        AccountException result = assertThrows(AccountException.class, new Executable() {
-            @Override
-            public void execute() throws Throwable {
-                accountServiceImpl.makeTransfer(1L, 2L, new BigDecimal(10));
-            }
-        });
+        AccountException result = assertThrows(AccountException.class, () ->
+                accountServiceImpl.makeTransfer(1L, 2L, new BigDecimal(10)));
         assertEquals("No source account", result.getLocalizedMessage());
     }
 

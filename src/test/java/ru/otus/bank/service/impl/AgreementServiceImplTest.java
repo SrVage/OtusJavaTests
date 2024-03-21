@@ -15,7 +15,7 @@ import static org.mockito.Mockito.*;
 
 class AgreementServiceImplTest {
 
-    private AgreementDao agreementDao = mock(AgreementDao.class);
+    private final AgreementDao agreementDao = mock(AgreementDao.class);
 
     AgreementServiceImpl agreementServiceImpl;
 
